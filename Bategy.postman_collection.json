@@ -1,0 +1,423 @@
+{
+	"info": {
+		"_postman_id": "ec8c8da8-eb43-4673-b35f-82401a91aa4d",
+		"name": "Bategy",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Leagues",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "7d891bc9-5648-4647-8578-a84611c70d38",
+						"exec": [
+							"//1. Check status code is 200",
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"//2. Check the status message is OK",
+							"pm.test(\"Status message is OK\", function () {",
+							"    pm.response.to.have.status(\"OK\");",
+							"});",
+							"",
+							"//3. Check the response format is JSON",
+							"pm.test(\"Response format is JSON\", function () {",
+							"    pm.response.to.have.jsonBody();",
+							"});",
+							"",
+							"//4. Check if response body contains all the keys",
+							"pm.test(\"Response body contains all the keys\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData).to.be.an(\"object\").that.has.all.keys(\"success\", \"data\");",
+							"});",
+							"//To print all keys in console",
+							"var jsonData = pm.response.json();",
+							"var allKeys = Object.keys(jsonData);",
+							"console.log(\"Keys are:\")",
+							"allKeys.forEach(function (key) {",
+							"    console.log(key);",
+							"});",
+							"",
+							"//5. Chek values of keys aren't NULL",
+							"pm.test(\"Values of keys aren't NULL\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.success).not.equal(null);",
+							"    pm.expect(jsonData.data).not.equal(null);",
+							"});",
+							"",
+							"//6. Check values of keys aren't empty",
+							"pm.test(\"Values of keys aren't empty\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.success).not.equal(\"\");",
+							"    pm.expect(jsonData.data).not.equal(\"\");",
+							"});",
+							"",
+							"//7. Check the value of 'success' key is true",
+							"pm.test(\"The value of 'success' key is true\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.success).to.equal(true);",
+							"});",
+							"",
+							"//8. Check response time is less than 200ms",
+							"pm.test(\"Response time is less than 200ms\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(200);",
+							"});",
+							"",
+							"//9. Check response headers are correct",
+							"pm.test(\"Response headers are correct\", function () {",
+							"    pm.response.to.be.header(\"Content-Type\", \"application/json\");",
+							"});",
+							"",
+							"//10. Check the response body schema is valid - for referrence https://techbrij.com/json-schema-validation-postman-ajv-brijpad",
+							"var Ajv = require('ajv'),",
+							"    ajv = new Ajv({ logger: console }),",
+							"    schema = {",
+							"        \"required\": [",
+							"            \"success\",",
+							"            \"data\"",
+							"        ],",
+							"        \"properties\": {",
+							"            \"success\": {",
+							"                \"$id\": \"#/properties/success\",",
+							"                \"type\": \"boolean\"",
+							"            },",
+							"            \"data\": {",
+							"                \"items\": {",
+							"                    \"required\": [",
+							"                        \"id\",",
+							"                        \"external_id\",",
+							"                        \"parent_id\",",
+							"                        \"sport_id\",",
+							"                        \"location_id\",",
+							"                        \"name\",",
+							"                        \"internal_name\",",
+							"                        \"url\",",
+							"                        \"images\",",
+							"                        \"logo\"",
+							"                    ],",
+							"                    \"properties\": {",
+							"                        \"id\": {",
+							"                            \"$id\": \"#/properties/data/items/properties/id\",",
+							"                            \"type\": \"integer\"",
+							"                        },",
+							"                        \"external_id\": {",
+							"                            \"$id\": \"#/properties/data/items/properties/external_id\",",
+							"                            \"type\": \"integer\"",
+							"                        },",
+							"                        \"sport_id\": {",
+							"                            \"$id\": \"#/properties/data/items/properties/sport_id\",",
+							"                            \"type\": \"integer\"",
+							"                        },",
+							"                        \"location_id\": {",
+							"                            \"$id\": \"#/properties/data/items/properties/location_id\",",
+							"                            \"type\": \"integer\"",
+							"                        },",
+							"                        \"name\": {",
+							"                            \"$id\": \"#/properties/data/items/properties/name\",",
+							"                            \"type\": \"string\"",
+							"                        },",
+							"                        \"internal_name\": {",
+							"                            \"$id\": \"#/properties/data/items/properties/internal_name\",",
+							"                            \"type\": \"string\"",
+							"                        },",
+							"                        \"url\": {",
+							"                            \"$id\": \"#/properties/data/items/properties/url\",",
+							"                            \"type\": \"string\"",
+							"                        },",
+							"                        \"images\": {",
+							"                            \"items\": {",
+							"                                \"required\": [",
+							"                                    \"path\",",
+							"                                    \"image\"",
+							"                                ],",
+							"                                \"properties\": {",
+							"                                    \"path\": {",
+							"                                        \"$id\": \"#/properties/data/items/properties/images/items/properties/path\",",
+							"                                        \"type\": \"string\"",
+							"                                    },",
+							"                                    \"image\": {",
+							"                                        \"$id\": \"#/properties/data/items/properties/images/items/properties/image\",",
+							"                                        \"type\": \"string\"",
+							"                                    }",
+							"                                },",
+							"                                \"$id\": \"#/properties/data/items/properties/images/items\",",
+							"                                \"type\": \"object\"",
+							"                            },",
+							"                            \"$id\": \"#/properties/data/items/properties/images\",",
+							"                            \"type\": \"array\"",
+							"                        },",
+							"                    },",
+							"                    \"$id\": \"#/properties/data/items\",",
+							"                    \"type\": \"object\"",
+							"                },",
+							"                \"$id\": \"#/properties/data\",",
+							"                \"type\": \"array\"",
+							"            }",
+							"        },",
+							"        \"$id\": \"http://example.org/root.json#\",",
+							"        \"type\": \"object\",",
+							"        \"definitions\": {},",
+							"        \"$schema\": \"http://json-schema.org/draft-07/schema#\"",
+							"    }",
+							"",
+							"pm.test(\"Schema is valid\", function () {",
+							"    pm.expect(ajv.validate(schema, pm.response.json()), JSON.stringify(ajv.errors)).to.be.true;",
+							"});",
+							"",
+							"//Setting the array of external league IDs and internal names as environtment variables to use in the \"Events\" pre-request scripts",
+							"",
+							"var jsonData = pm.response.json();",
+							"var leagues = jsonData.data.map(x => {",
+							"    newObj = {};",
+							"    newObj[\"leagueID\"] = x.external_id,",
+							"    newObj[\"leagueName\"] = x.internal_name",
+							"    return newObj",
+							"});",
+							"",
+							"pm.environment.set(\"leagues\", JSON.stringify(leagues));",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Api-Token",
+						"value": "1UW1CisPeNgzS1QCiCEZIKffM7SGI6Vu",
+						"type": "text"
+					},
+					{
+						"key": "Authorization",
+						"value": "Basic c3BvcnRhcHA6MTIza2FkYWJyYQ==",
+						"type": "text"
+					},
+					{
+						"key": "Api-Multi-Site-Token",
+						"value": "141e310d-7683-454f-bb1b-92f9ffd2c85a",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "https://dev.sportapp.bet/api/betegy/leagues",
+					"protocol": "https",
+					"host": [
+						"dev",
+						"sportapp",
+						"bet"
+					],
+					"path": [
+						"api",
+						"betegy",
+						"leagues"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Markets",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "b70fff65-a7dc-4265-999b-529cda54ec2b",
+						"exec": [
+							"//1. Check status code is 200",
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"//2. Check the status message is OK",
+							"pm.test(\"Status message is OK\", function () {",
+							"    pm.response.to.have.status(\"OK\");",
+							"});",
+							"",
+							"//3. Check the response format is JSON",
+							"pm.test(\"Response format is JSON\", function () {",
+							"    pm.response.to.have.jsonBody();",
+							"});",
+							"",
+							"//Check response time is less than 200ms",
+							"pm.test(\"Response time is less than 200ms\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(200);",
+							"});",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Api-Token",
+						"value": "1UW1CisPeNgzS1QCiCEZIKffM7SGI6Vu",
+						"type": "text"
+					},
+					{
+						"key": "Authorization",
+						"value": "Basic c3BvcnRhcHA6MTIza2FkYWJyYQ==",
+						"type": "text"
+					},
+					{
+						"key": "Api-Multi-Site-Token",
+						"value": "141e310d-7683-454f-bb1b-92f9ffd2c85a",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "https://dev.sportapp.bet/api/betegy/markets",
+					"protocol": "https",
+					"host": [
+						"dev",
+						"sportapp",
+						"bet"
+					],
+					"path": [
+						"api",
+						"betegy",
+						"markets"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Events",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "9fae1830-9200-40ca-84bc-02987badae91",
+						"exec": [
+							"var leagues = JSON.parse(pm.environment.get(\"leagues\"));",
+							"",
+							"if(leagues && leagues.length > 0){",
+							"    postman.setNextRequest(\"Events\")",
+							"} else postman.setNextRequest(\"null\")",
+							"",
+							"var leagueName = pm.environment.get(\"current_league_name\")",
+							"",
+							"//1. Check status code is 200",
+							"pm.test(leagueName + \": Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"//2. Check the status message is OK",
+							"pm.test(leagueName + \": Status message is OK\", function () {",
+							"    pm.response.to.have.status(\"OK\");",
+							"});",
+							"",
+							"//3. Check the response format is JSON",
+							"pm.test(leagueName + \": Response format is JSON\", function () {",
+							"    pm.response.to.have.jsonBody();",
+							"});",
+							"",
+							"//Check response time is less than 200ms",
+							"pm.test(leagueName + \": Response time is less than 200ms\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(200);",
+							"});",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "bd51d32d-cedf-4cf4-807e-6a09af87fcd4",
+						"exec": [
+							"var leagues = JSON.parse(pm.environment.get(\"leagues\"));",
+							"",
+							"if (!leagues) {",
+							"pm.sendRequest(\"Leagues\");",
+							"var jsonData = pm.response.json();",
+							"var leagues = jsonData.data.map(x => {",
+							"    newObj = {};",
+							"    newObj[\"leagueID\"] = x.external_id,",
+							"    newObj[\"leagueName\"] = x.internal_name",
+							"    return newObj",
+							"});",
+							"pm.environment.set(\"leagues\", JSON.stringify(leagues));",
+							"}",
+							"",
+							"var leagues = JSON.parse(pm.environment.get(\"leagues\"));",
+							"var currentLeague = leagues.shift();",
+							"",
+							"pm.environment.set(\"current_league_id\", currentLeague.leagueID);",
+							"pm.environment.set(\"current_league_name\", currentLeague.leagueName);",
+							"",
+							"pm.environment.set(\"leagues\", JSON.stringify(leagues));"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Api-Token",
+						"value": "1UW1CisPeNgzS1QCiCEZIKffM7SGI6Vu",
+						"type": "text"
+					},
+					{
+						"key": "Authorization",
+						"value": "Basic c3BvcnRhcHA6MTIza2FkYWJyYQ==",
+						"type": "text"
+					},
+					{
+						"key": "Api-Multi-Site-Token",
+						"value": "141e310d-7683-454f-bb1b-92f9ffd2c85a",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"leagueID\": \"{{current_league_id}}\"\n}"
+				},
+				"url": {
+					"raw": "https://dev.sportapp.bet/api/betegy/events",
+					"protocol": "https",
+					"host": [
+						"dev",
+						"sportapp",
+						"bet"
+					],
+					"path": [
+						"api",
+						"betegy",
+						"events"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"protocolProfileBehavior": {}
+}
